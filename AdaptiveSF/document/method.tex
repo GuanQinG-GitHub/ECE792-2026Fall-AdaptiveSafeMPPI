@@ -1,0 +1,260 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+\documentclass[12pt]{article}
+\usepackage{mathrsfs}
+\usepackage{libertine}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{natbib}
+\bibliographystyle{plainnat}
+\setcitestyle{numbers,square}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{booktabs}
+\usepackage{datetime2}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage[most]{tcolorbox}
+\usepackage{mathtools}
+% \usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+
+
+\lstset{
+    language=bash,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green},
+    showstringspaces=false,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    breaklines=true,
+    captionpos=b,
+    escapeinside={(*@}{@*)},
+}
+
+\geometry{
+    margin=1in,
+    headheight=12pt
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[L]{\small }
+\fancyhead[R]{\small\thepage}
+\fancyfoot[C]{\small Technical Notes}
+
+\titleformat{\section}
+    {\normalfont\large\bfseries}{\thesection}{1em}{}
+\titlespacing*{\section}
+    {0pt}{2.5ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\makeatletter
+\renewcommand{\maketitle}{%
+    \begin{center}
+        \vspace*{0.5cm}
+        \Large\@title
+        
+        \vspace{0.4cm}
+        \large\@author
+    \end{center}
+}
+\makeatother
+
+% Paper info
+\title{\LARGE \textbf{Conditional Hamilton-Jacobi Reachability Problem}
+}
+\author{2026-11-17}
+
+
+\newtcolorbox{Theorem}[1][]{
+  breakable,                % allow page breaks if remark is long
+  colback=white,            % background color
+  colframe=blue,           % frame color
+  boxrule=0.5pt,            % thickness of the frame
+  leftrule=0.5pt,           % left frame
+  rightrule=0.5pt,          % right frame
+  top=3pt, bottom=3pt,      % padding above and below
+  left=6pt, right=6pt,      % padding left and right
+  before skip=10pt,         % vertical space before environment
+  after skip=10pt,          % vertical space after environment
+  title={{\bfseries Theorem\ifstrempty{#1}{}{:\,#1}}}, % puts “Theorem:” in bold at the top
+  fonttitle=\normalfont     % keep the rest of the text in normal font
+}
+
+\newtcolorbox{Proof}[1][]{
+  breakable,                % allow page breaks if remark is long
+  colback=white,            % background color
+  colframe=gray,           % frame color
+  boxrule=0.5pt,            % thickness of the frame
+  leftrule=0.5pt,           % left frame
+  rightrule=0.5pt,          % right frame
+  top=3pt, bottom=3pt,      % padding above and below
+  left=6pt, right=6pt,      % padding left and right
+  before skip=10pt,         % vertical space before environment
+  after skip=10pt,          % vertical space after environment
+  title={{\bfseries Proof\ifstrempty{#1}{}{:\,#1}}}, % puts “Theorem:” in bold at the top
+  fonttitle=\normalfont,     % keep the rest of the text in normal font
+  after upper={\par\hfill\(\blacksquare\)}
+}
+
+\newtcolorbox{Remark}[1][]{
+  breakable,                % allow page breaks if remark is long
+  colback=white,            % background color
+  colframe=red,           % frame color
+  boxrule=0.5pt,            % thickness of the frame
+  leftrule=0.5pt,           % left frame
+  rightrule=0.5pt,          % right frame
+  top=3pt, bottom=3pt,      % padding above and below
+  left=6pt, right=6pt,      % padding left and right
+  before skip=10pt,         % vertical space before environment
+  after skip=10pt,          % vertical space after environment
+  title={{\bfseries Remark\ifstrempty{#1}{}{:\,#1}}}, % puts “Theorem:” in bold at the top
+  fonttitle=\normalfont     % keep the rest of the text in normal font
+}
+
+\newtcolorbox{Definition}[1][]{
+  breakable,                % allow page breaks if remark is long
+  colback=white,            % background color
+  colframe=black,           % frame color
+  boxrule=0.5pt,            % thickness of the frame
+  leftrule=0.5pt,           % left frame
+  rightrule=0.5pt,          % right frame
+  top=3pt, bottom=3pt,      % padding above and below
+  left=6pt, right=6pt,      % padding left and right
+  before skip=10pt,         % vertical space before environment
+  after skip=10pt,          % vertical space after environment
+  title={{\bfseries Definition\ifstrempty{#1}{}{:\,#1}}}, % puts “Theorem:” in bold at the top
+  fonttitle=\normalfont     % keep the rest of the text in normal font
+}
+
+\newtcolorbox{Algorithm}[1][]{
+  breakable,                % allow page breaks if remark is long
+  colback=white,            % background color
+  colframe=gray,           % frame color
+  boxrule=0.5pt,            % thickness of the frame
+  leftrule=0.5pt,           % left frame
+  rightrule=0.5pt,          % right frame
+  top=3pt, bottom=3pt,      % padding above and below
+  left=6pt, right=6pt,      % padding left and right
+  before skip=10pt,         % vertical space before environment
+  after skip=10pt,          % vertical space after environment
+  title={{\bfseries Algorithm\ifstrempty{#1}{}{:\,#1}}}, % puts “Theorem:” in bold at the top
+  fonttitle=\normalfont     % keep the rest of the text in normal font
+}
+
+\newtcolorbox{Lemma}[1][]{
+  breakable,                % allow page breaks if remark is long
+  colback=white,            % background color
+  colframe=gray,           % frame color
+  boxrule=0.5pt,            % thickness of the frame
+  leftrule=0.5pt,           % left frame
+  rightrule=0.5pt,          % right frame
+  top=3pt, bottom=3pt,      % padding above and below
+  left=6pt, right=6pt,      % padding left and right
+  before skip=10pt,         % vertical space before environment
+  after skip=10pt,          % vertical space after environment
+  title={{\bfseries Lemma\ifstrempty{#1}{}{:\,#1}}}, % puts “Theorem:” in bold at the top
+  fonttitle=\normalfont     % keep the rest of the text in normal font
+}
+\begin{document}
+
+\maketitle
+
+\section{Basic Setup}
+
+\noindent\textbf{System Dynamics and State Constraints}
+
+We consider the following nonlinear disturbed system dynamics defined over an infinite horizon:
+\begin{equation}
+    \mathrm{x}_{x}^{\mathrm{u},\mathrm{d}}(0)=x,\quad 
+    \dot{\mathrm{x}}_{x}^{\mathrm{u},\mathrm{d}}(t)=f\bigl(\mathrm{x}_{x}^{\mathrm{u},\mathrm{d}}(t),\mathrm{u}(t),\mathrm{d}(t)\bigr),
+    \quad t\in(0,\infty),
+    \label{eq:dynamics}
+\end{equation}
+where $\mathrm{x}(t)\in\mathbb{R}^{n}$ is the state at time $t$ and $x$ is the initial state. The control input is $\mathrm{u}(t)\in U$, and the disturbance is $\mathrm{d}(t)\in D$, where $U$ and $D$ are compact sets. The control $\mathrm{u}\in\mathcal{U}$ and disturbance signal $\mathrm{d}\in\mathcal{D}$ are measurable functions from $[0,\infty)$ to $U$ and $D$, respectively. We assume that $f$ is locally Lipschitz in $x$, so $\mathrm{x}_{x}^{\mathrm{u},\mathrm{d}}(\cdot)$ uniquely exists on its maximal interval of existence. The disturbance $\mathrm{d}$ captures, e.g., modeling error, external perturbations, or uncertain controls of other agents. 
+
+We consider Stackelberg zero-sum games to model the interaction between control and disturbance signals, where the disturbance signal $\mathrm{d}$ is reactive to the control signal $\mathrm{u}$ in a notion of non-anticipative strategy, i.e., $\mathrm{d}=\delta[\mathrm{u}]$, where $\delta\in\Delta:\mathcal{U}\to\mathcal{D}$ denotes a non-anticipative disturbance strategy. This non-anticipative strategy prevents the disturbance signal from exploiting future information about the control input.
+
+In safety-critical systems, the state is subject to hard constraints, such as collision avoidance. Let $g:\mathbb{R}^{n}\to\mathbb{R}$ be a bounded Lipschitz continuous function, and define the safety constraint set
+\begin{equation}
+    \mathcal{X}:=\{x\in\mathbb{R}^{n}\mid g(x)\ge 0\}.
+    \label{eq:state_constraints_set}
+\end{equation}
+A trajectory is called \emph{safe} if it remains in $\mathcal{X}$ for all time.
+
+To analyze trajectory safety, we start from characterizing a RCIS within $\mathcal{X}$.
+Formally, a set $\mathcal{S}\subseteq\mathcal{X}$ is called a RCIS if, for every $x\in\mathcal{S}$ and all admissible non-anticipative disturbance strategies, there exists a control signal $\mathrm{u}\in\mathcal{U}$ such that the corresponding trajectory remains in $\mathcal{S}$, i.e.,
+\begin{equation}
+    \forall\,\delta\in\Delta,\,\exists\,\mathrm{u}\in\mathcal{U}\,\text{ s.t. }\,    \mathrm{x}^{\mathrm{u},\delta[\mathrm{u}]}_{x}(t)\in \mathcal{S},\,
+    \forall\,t\ge 0.    
+    \label{eq:def_RCIS}
+\end{equation}
+The maximal RCIS contained in $\mathcal{X}$ is the VK, denoted by
+\begin{equation}
+    \mathcal{V} := \bigl\{
+        x
+        \,\big|\,
+        \forall\,\delta\in\Delta,\,\exists\,\mathrm{u}\in\mathcal{U}\,\text{ s.t. }\,
+        \mathrm{x}^{\mathrm{u},\delta[\mathrm{u}]}_{x}(t)\in\mathcal{X},\,
+        \forall\,t\ge 0
+    \bigr\}.
+    \label{eq:def_viability kernel}
+\end{equation}
+
+
+\noindent\textbf{HJ Reachability Problem}
+
+HJ reachability analysis provides a principled framework for characterizing the VK and devising robust safety filters by formulating the problem as a Stackelberg zero-sum game.
+\begin{equation}
+    V_{\gamma}(x):=\inf_{\delta\in\Delta}\sup_{\mathrm{u}\in\mathcal{U}}
+    J_{\gamma}\bigl(x,\mathrm{u},\delta[\mathrm{u}]\bigr),
+    \label{eq:value}
+\end{equation}
+where the cost $J_{\gamma}$ is defined as:
+\begin{equation}
+    J_{\gamma}(x,\mathrm{u},\mathrm{d})
+    := \inf_{t\in[0,\infty)} e^{-\gamma t}\,
+        g\bigl(\mathrm{x}^{\mathrm{u},\mathrm{d}}_{x}(t)\bigr),
+    \label{eq:J_cost}
+\end{equation}
+with a discounting factor $\gamma > 0$. Under this formulation, the safe set is defined as the zero-level set of the value function, i.e., $\mathcal{V} = \{x \mid V_{\gamma}(x)=0 \}$.
+
+By the principle of dynamic programming, $V_{\gamma}$ is the unique bounded continuous viscosity solution of the below HJI-VI,
+
+\begin{equation}
+    0=
+    \max\Bigl\{
+        g(x)-V_{\gamma}(x),\;
+        \max_{u\in U}\min_{d\in D}
+        \nabla  V_{\gamma}(x)\cdot f(x,u,d)-\gamma V_{\gamma}(x)
+    \Bigr\}.
+    \label{eq:HJI_VI}
+\end{equation}
+Therefore, solving the HJ reachability problem amounts to solving for the value function $V_{\gamma}(x)$ in the above HJI-VI. This HJI-VI is typically solved by grid-based level-set methods based on dynamic programming. Since the associated Bellman operator is provably a contraction mapping, one can start with any initialization, not necessarily $g(x)$.
+
+\section{Conditional Value Function for Various Constraint Functions}
+As stated, after specifying the 1) system dynamics $f(\cdot)$, 2) control and disturbance bounds $U$, $D$, and 3) constraint function $g(\cdot)$, the value function $V(x)$ is determined. Data-driven schemes have extended the classical value function to the adaptive value function, $V_{\theta}(x,z)$, where $\theta$ is the neural network weights that parameterize the value function and $z$ is the additional latent vector that encodes the various operating design domains that $V_{\theta}(x,z)$ is designed to adapt to.
+
+Herein, we consider to design a conditional value function for different constraint functions representing different static environments, e.g., various indoor layouts. We train a variational autoencoder (VAE) that maps the signed-distance function (SDF) of a given static environment to its latent representation, $z\in\mathbb{R}^{Z}$, i.e., 
+\begin{equation}
+    \text{SDF}(x) \xrightleftharpoons[D_{\theta}(z)]{E_{\theta}\bigl[\text{SDF}(x)\bigr]} z,
+\end{equation}
+where $E_{\theta}(\cdot)$ and $D_{\theta}(\cdot)$ are trained encoder and decoders. In the implementation, $\text{SDF}(x)$ is represented over a grid.
+
+Then, we can train a conditional value function $V_{\theta}(x,z)$ which can be queried online with the queried $x$ and the estimated $z$.
+
+\section{Online Deployment}
+At each control tick, the robot obtain its surrounding occupancy grid from the LiDAR reading, and convert the occupancy grid to the SDF. Then, encoding the SDF by feeding that to the VAE to get its latent representation $z$. Finally, compute the conditional value function over the robot's grid by querying each grid with the latent $z$.
+\end{document}

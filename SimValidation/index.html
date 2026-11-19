@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdaptiveSF Validation Hub</title>
+<style>
+:root {
+  --bg: #f7f6f2; --panel: #ffffff; --ink: #1d1f23; --muted: #626872; --line: #e2e0d8;
+  --accent: #2f5d8a; --accent-soft: #e5edf5; --ok: #2e7d4f; --ok-soft: #e3f2e8;
+  --warn: #a5650b; --warn-soft: #fbf0dc; --todo: #6b6f78; --todo-soft: #eceef1; --code: #f0eee8;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --panel: #1e2125; --ink: #e7e8ea; --muted: #9aa0a8; --line: #30343a;
+    --accent: #8db7e0; --accent-soft: #23303d; --ok: #7cc79a; --ok-soft: #1f3327;
+    --warn: #e2b061; --warn-soft: #3a2f1c; --todo: #a2a7af; --todo-soft: #2a2e33; --code: #262a2f;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --panel: #1e2125; --ink: #e7e8ea; --muted: #9aa0a8; --line: #30343a;
+  --accent: #8db7e0; --accent-soft: #23303d; --ok: #7cc79a; --ok-soft: #1f3327;
+  --warn: #e2b061; --warn-soft: #3a2f1c; --todo: #a2a7af; --todo-soft: #2a2e33; --code: #262a2f;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 15.5px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif; }
+.wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 36px; max-width: 1240px; margin: 0 auto; padding: 32px 24px 80px; }
+nav { position: sticky; top: 24px; align-self: start; font-size: 14px; }
+nav .t { font-weight: 650; margin-bottom: 8px; }
+nav a { display: block; color: var(--muted); text-decoration: none; padding: 3px 0 3px 10px; border-left: 2px solid var(--line); }
+nav a:hover { color: var(--accent); border-left-color: var(--accent); }
+nav a.sub { padding-left: 22px; font-size: 13px; }
+header h1 { font-size: 30px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.01em; }
+header p { margin: 0; color: var(--muted); }
+h2 { font-size: 22px; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--line); }
+h3 { font-size: 17px; margin: 28px 0 8px; }
+p, li { max-width: 78ch; }
+a { color: var(--accent); }
+code { background: var(--code); padding: 1px 5px; border-radius: 4px; font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+pre { background: var(--code); padding: 12px 14px; border-radius: 8px; overflow-x: auto; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
+pre code { background: none; padding: 0; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.stages { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin-top: 18px; }
+.stage { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; text-decoration: none; color: inherit; display: block; }
+.stage:hover { border-color: var(--accent); }
+.stage .n { font-size: 12px; color: var(--muted); }
+.stage .h { font-weight: 620; margin: 2px 0 6px; }
+.stage .d { font-size: 13px; color: var(--muted); line-height: 1.45; }
+.pill { display: inline-block; font-size: 11.5px; font-weight: 600; padding: 1px 8px; border-radius: 999px; }
+.pill.review { background: var(--warn-soft); color: var(--warn); }
+.pill.done { background: var(--ok-soft); color: var(--ok); }
+.pill.todo { background: var(--todo-soft); color: var(--todo); }
+.callout { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; }
+.callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.callout > :first-child { margin-top: 0; } .callout > :last-child { margin-bottom: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 10px 0 4px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.03em; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tablewrap { overflow-x: auto; }
+figure { margin: 18px 0 26px; }
+figure img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; background: #fff; display: block; }
+figcaption { font-size: 13.5px; color: var(--muted); margin-top: 8px; max-width: 95ch; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; margin: 14px 0; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.kpi .v { font-size: 22px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+ol.q li, ul.tight li { margin-bottom: 6px; }
+.log { border-left: 2px solid var(--line); padding-left: 16px; }
+.log .e { margin-bottom: 14px; }
+.log .when { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.themebtn { float: right; font: inherit; font-size: 13px; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+@media (max-width: 860px) {
+  .wrap { grid-template-columns: 1fr; padding: 20px 16px 60px; gap: 8px; }
+  nav { position: static; }
+  header h1 { font-size: 25px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <div class="t">Contents</div>
+  <a href="#overview">Overview &amp; stages</a>
+  <a href="#resume">Resume in a new session</a>
+  <a href="#conventions">Conventions</a>
+  <a href="#s1">Stage 1 · Static forest</a>
+  <a class="sub" href="#s1-world">World generator</a>
+  <a class="sub" href="#s1-vf">Value-function check</a>
+  <a class="sub" href="#s1-findings">Findings</a>
+  <a class="sub" href="#s1-questions">Deferred notes</a>
+  <a href="#s2">Stage 2 · Dynamic env.</a>
+  <a href="#s3">Stage 3 · MPPI</a>
+  <a href="#s4">Stages 4–6</a>
+  <a href="#files">File index</a>
+  <a href="#log">Session log</a>
+</nav>
+
+<main>
+<header id="overview">
+  <button class="themebtn" onclick="toggleTheme()">Light / dark</button>
+  <h1>Adaptive safety filter: simulation validation</h1>
+  <p>Hub for the multi-session validation of the latent-conditioned HJ safety filter in <code>AdaptiveSF/</code>.
+     Last updated 2026-11-19 (session 2).</p>
+</header>
+
+<p>Goal: build simulated environments, run the trained adaptive safety filter (SDF → VAE latent <i>z</i> → value network
+<i>V<sub>θ</sub>(x, z)</i>) in closed loop with a goal-seeking nominal controller that ignores obstacles, collect
+metrics, and render animations. Method: <code>AdaptiveSF/document/method.tex</code>; model details:
+<code>AdaptiveSF/README.md</code>.</p>
+
+<div class="stages">
+  <a class="stage" href="#s1"><div class="n">Stage 1 <span class="pill done">done</span></div>
+    <div class="h">Static forest world + SF check</div>
+    <div class="d">50 m × 50 m dense forest, local sensing, zero-level sets at random poses.</div></a>
+  <a class="stage" href="#s2"><div class="n">Stage 2 <span class="pill todo">planned</span></div>
+    <div class="h">Dynamic environments</div>
+    <div class="d">Moving obstacles; how they enter a value function trained on static SDFs is still to be decided.</div></a>
+  <a class="stage" href="#s3"><div class="n">Stage 3 <span class="pill review">planned, paused</span></div>
+    <div class="h">Nominal MPPI + log-MPPI baseline</div>
+    <div class="d">Reproduce log-MPPI_ros (PyCUDA), then nominal MPPI and the log-MPPI collision baseline in our forest, with mp4s. Continues on the GPU machine.</div></a>
+  <a class="stage" href="#s3"><div class="n">Stage 4 <span class="pill todo">planned</span></div>
+    <div class="h">Closed-loop safety filter</div>
+    <div class="d">Least-restrictive / QP filter using V and ∇V at the ego state each tick.</div></a>
+  <a class="stage" href="#s3"><div class="n">Stage 5 <span class="pill todo">planned</span></div>
+    <div class="h">Batch experiments &amp; metrics</div>
+    <div class="d">Collision rate, goal reach, time, filter interventions, vs. baselines.</div></a>
+  <a class="stage" href="#s3"><div class="n">Stage 6 <span class="pill todo">planned</span></div>
+    <div class="h">Animation rendering</div>
+    <div class="d">World view and ego-window view with the live V = 0 set.</div></a>
+</div>
+
+<h2 id="resume">Resume in a new session</h2>
+<div class="callout">
+<p>Point the new session at this file: <em>“Read <code>SimValidation/index.html</code> and continue with stage N.”</em>
+Everything lives in <code>/Users/xinlei/Documents/ECE792_Project/SimValidation/</code>; the trained models are imported
+from the sibling <code>AdaptiveSF/</code> folder (no copies). Python on the Mac: the conda <code>base</code> env (torch 2.10, MPS). On the GPU machine: <code>git pull</code> from the GitHub repo and see the top-level <code>README.md</code>.</p>
+</div>
+<pre><code>cd /Users/xinlei/Documents/ECE792_Project/SimValidation
+python scripts/s1_generate_forest.py --seed 0            # world -> worlds/forest_seed0.json, map figure (≈3 s)
+python scripts/s1_check_value_function.py --n-stats 100  # SF pipeline at 100 random poses (≈45 s on MPS)
+python scripts/s1_inspect_pose.py --pose-id 20           # zoom into one pose of the check</code></pre>
+<p>Every stage should add its scripts as <code>scripts/sN_*.py</code>, write outputs to <code>results/stageN/</code>,
+and append a section plus a session-log entry here.</p>
+
+<h2 id="conventions">Conventions (fixed by the trained models)</h2>
+<div class="tablewrap"><table>
+<tr><th>Item</th><th>Value</th></tr>
+<tr><td>World frame</td><td>x right, y up, metres; map [0, 50] × [0, 50]; nothing outside the map (no walls, for now)</td></tr>
+<tr><td>Robot</td><td>Disc, r = 0.25 m; pose (x, y, ψ)</td></tr>
+<tr><td>Dynamics</td><td>Dubins car ẋ = v cos θ + d<sub>x</sub>, ẏ = v sin θ + d<sub>y</sub>, θ̇ = ω + d<sub>θ</sub>; v ∈ [0, 1] m/s, ω ∈ [−1, 1] rad/s, |d<sub>x</sub>|, |d<sub>y</sub>| ≤ 0.1 m/s, |d<sub>θ</sub>| ≤ 0.1 rad/s</td></tr>
+<tr><td>Sensing window</td><td>5 m × 5 m, 100 × 100 cells of 0.05 m, centred on the robot, +x along heading; arrays indexed <code>[ix, iy]</code></td></tr>
+<tr><td>SDF</td><td>Metres, + in free space, obstacles <b>not</b> inflated; everything outside the window counts as obstacle (closed border)</td></tr>
+<tr><td>Value</td><td>V(x, y, θ; z) in metres, robust over a 6 s horizon, no discount. V &gt; 0 = safe; labels clipped at −0.25</td></tr>
+<tr><td>Heading slice</td><td>In the ego frame the robot is at (0, 0, 0); “θ = ego heading” means the θ = 0 slice</td></tr>
+</table></div>
+
+<!-- ============================ STAGE 1 ============================ -->
+<h2 id="s1">Stage 1 · Static forest world and value-function check <span class="pill done">done</span></h2>
+<p>Scope agreed for this stage: build the environment only (no controller), place the robot at random collision-free
+poses, run the full adaptive-SF pipeline, and look at the zero-level set of the value function.</p>
+
+<h3 id="s1-world">1a. Forest world generator</h3>
+<p>Obstacles are analytic shapes with exact signed distance, so the true SDF can be queried at any point (used for
+collision checks now and for ground truth later). Placement is rejection sampling on bounding discs with a minimum
+gap, a 2 m clear disc around start and goal, and a start→goal connectivity check for the disc robot.</p>
+<div class="tablewrap"><table>
+<tr><th>Parameter</th><th>Value (seed 0)</th><th>Note</th></tr>
+<tr><td>Map</td><td class="num">50 m × 50 m</td><td>start (3, 3), goal (47, 47)</td></tr>
+<tr><td>Obstacles</td><td class="num">900</td><td>590 trunks (r 0.12–0.35 m), 79 big trunks (r 0.35–0.75 m), 109 rocks (random convex hulls), 57 bushes (non-convex star polygons), 20 fallen logs (thin boxes / ellipses, 1.5–3.5 m), 45 boxes</td></tr>
+<tr><td>Min. gap between bounding discs</td><td class="num">0.15 m</td><td>Smaller than the robot diameter, so some passages are dead ends</td></tr>
+<tr><td>Occupied area</td><td class="num">13.4 %</td><td></td></tr>
+<tr><td>Free-space clearance (10 / 50 / 90 pct.)</td><td class="num">0.11 / 0.43 / 0.89 m</td><td>Distance from free cells to the nearest obstacle</td></tr>
+<tr><td>Start → goal connected</td><td>yes</td><td>For clearance r + 5 cm</td></tr>
+</table></div>
+<figure>
+  <a href="results/stage1/forest_seed0_map.png"><img src="results/stage1/forest_seed0_map.png" alt="Forest map and global SDF"></a>
+  <figcaption><b>Figure 1.</b> Left: the forest world with the 5 m sensing window drawn at the start. Right: global SDF;
+  red tint marks cells where the robot centre would collide (SDF ≤ r). Generator parameters are in
+  <code>simenv/world.py → DEFAULT_FOREST</code> and are easy to change (density, size ranges, mix, gap).</figcaption>
+</figure>
+
+<h3 id="s1-vf">1b. Value-function check at random poses</h3>
+<p>100 poses: 70 uniformly random with clearance &gt; r + 5 cm, and 30 “challenge” poses 8–45 cm from an obstacle
+surface (beyond r) and roughly facing it. For each pose:</p>
+<ol class="tight">
+  <li>Local occupancy: true occupancy of each window cell centre (perfect perception, no occlusion).</li>
+  <li>SDF from occupancy with the closed border (<code>sdf_from_occupancy</code>, README §2.3).</li>
+  <li>VAE encode → <i>z</i>; value network on the full 100 × 100 × 36 grid.</li>
+  <li>Checks against the exact window SDF. No DP reference exists for these windows, so the checks are necessary
+      conditions only: at t = 0, V can never exceed SDF − r.</li>
+</ol>
+
+<div class="kpis">
+  <div class="kpi"><div class="v">86 %</div><div class="l">random poses with V(ego) &gt; 0</div></div>
+  <div class="kpi"><div class="v">53 %</div><div class="l">challenge poses with V(ego) &gt; 0</div></div>
+  <div class="kpi"><div class="v">0 / 100</div><div class="l">poses with V(ego) &gt; true SDF − r</div></div>
+  <div class="kpi"><div class="v">0.11 %</div><div class="l">states “certainly false-safe” (mean; max 0.29 %)</div></div>
+  <div class="kpi"><div class="v">≤ 9.9 cm</div><div class="l">V at those states (median per window 4.8 cm)</div></div>
+  <div class="kpi"><div class="v">0.31 s</div><div class="l">encode + full 360k-state grid (MPS); sensing 18 ms</div></div>
+</div>
+
+<figure>
+  <a href="results/stage1/vf_detail.png"><img src="results/stage1/vf_detail.png" alt="Per-pose value function panels"></a>
+  <figcaption><b>Figure 2.</b> Eight poses (rows 0–5 random, 6–7 challenge), all in the ego frame (robot at the origin,
+  arrow = heading). Col 1: sensed occupancy; dashed = true SDF = r. Col 2: SDF fed to the VAE; black = true SDF = r,
+  magenta dashed = VAE-decoded SDF = r. Col 3: V on the θ = ego-heading slice with its zero-level set (magenta).
+  Col 4: V = 0 for four headings (arrow colours), green = safe for at least one heading.</figcaption>
+</figure>
+<figure>
+  <a href="results/stage1/vf_world.png"><img src="results/stage1/vf_world.png" alt="Safe sets in the world frame"></a>
+  <figcaption><b>Figure 3.</b> Left: all 100 poses coloured by V(ego). Right: zoom on six nearby poses; each robot's
+  window (dashed) and its estimated safe set {V &gt; 0} at the current heading, mapped back to the world frame. The
+  sets overlap and agree on the shared obstacles, which suggests the latent encoding behaves consistently as the
+  window moves and rotates.</figcaption>
+</figure>
+<figure>
+  <a href="results/stage1/vf_stats.png"><img src="results/stage1/vf_stats.png" alt="Statistics over 100 poses"></a>
+  <figcaption><b>Figure 4.</b> (1) V(ego) histogram. (2) V(ego) against the true clearance SDF − r at the ego; every point
+  is below the bound. (3) Share of window cells inside the safe set. (4) Worst per-window over-estimation
+  V − max(SDF − r, −0.25). Most of it is at states with V ≤ 0, which does not change whether a state is classified safe.
+  Where V &gt; 0, only 0.63 % of states over-estimate by more than 2 cm.</figcaption>
+</figure>
+<figure>
+  <a href="results/stage1/inspect_pose20.png"><img src="results/stage1/inspect_pose20.png" alt="Worst false-safe pose"></a>
+  <figcaption><b>Figure 5.</b> Worst pose (#20) for false-safe states, shown on the heading slice where they peak. They are at
+  concave corners where two inflated obstacles, or an obstacle and the window border, meet. The decoded SDF (orange)
+  rounds off those corners, so the safe set reaches a few cm into the true r-inflated obstacle.</figcaption>
+</figure>
+
+<h3 id="s1-findings">Findings</h3>
+<ul>
+  <li><b>The pipeline runs end to end on the forest.</b> The zero-level sets follow the obstacles and close off narrow gaps,
+      and they keep a buffer beyond SDF = r. That buffer is expected from the 6 s robust horizon with bounded
+      disturbance. The safe set never reaches the window edge because everything outside the window counts as an obstacle.</li>
+  <li><b>The forest is partly out of distribution for the VAE</b> (rocks, bushes and ellipses were not in its training set,
+      which had discs and boxes only). At SDF = r the boundary error is 3.8 cm (2.8 cm on its own test set). Errors
+      lean conservative: 5.9 % of free cells are decoded as not free, and 0.15 % of non-free cells are decoded as free.</li>
+  <li><b>Small, localized over-estimation.</b> 0.11 % of states have V &gt; 0 although the true clearance is already ≤ r.
+      All of them are on the boundary band at concave corners (Figure 5), and V there is at most 9.9 cm. This matches
+      the README's end-to-end false-safe rate (0.09 %). It argues for a small margin in the filter (switch at V ≤ ε with
+      ε ≈ 5–10 cm). That choice is for stage 4.</li>
+  <li><b>Sensing (occupancy → SDF) is not the bottleneck.</b> The 5 cm-grid SDF differs from the exact SDF by 0.8 cm on average.</li>
+  <li><b>Timing.</b> The full grid takes 0.31 s on MPS. Closed loop only needs V and ∇V at the ego state plus one encode
+      per sensing update, so it will be much faster.</li>
+</ul>
+<div class="callout warn">
+<p><b>Limits of this check.</b> Without DP or rollouts these are necessary-condition checks only; they cannot detect a
+safe-set boundary that is too large because of future (t &gt; 0) infeasibility. Stage 4 rollouts (or a DP solve on a
+few forest windows) will close that gap.</p>
+</div>
+
+<h3 id="s1-questions">Notes to revisit (deferred on 2026-11-19)</h3>
+<p>Stage 1 was accepted as is. Revisit these points later; they do not block Stage 3.</p>
+<ol class="q">
+  <li><b>Density.</b> 900 obstacles / 13.4 % occupied, with about 5–8 obstacles per window. Denser, sparser, or a
+      density gradient along the route?</li>
+  <li><b>Narrow gaps.</b> The minimum gap (0.15 m) allows dead-end passages narrower than the robot. Keep them (they
+      exercise the filter), or enforce a gap of at least 2r + margin?</li>
+  <li><b>Map boundary.</b> Currently there are no obstacles outside [0, 50]². Add boundary walls?</li>
+  <li><b>Perception model.</b> Perfect local crop for now. Add LiDAR ray casting with occluded cells treated as occupied
+      (conservative) or as free?</li>
+  <li><b>Obstacle shapes.</b> Keep rocks, bushes and ellipses (out of distribution, a harder test), or restrict to discs and boxes
+      (matching training) for a first clean result?</li>
+</ol>
+
+<!-- ============================ STAGE 2 ============================ -->
+<h2 id="s2">Stage 2 · Dynamic environments <span class="pill todo">planned</span></h2>
+<p>Not started. Design decision to make first: the value function is trained for <em>static</em> SDFs, so moving obstacles
+need a mapping into the static window. Options: (a) snapshot SDF at each tick, re-encoded at a high rate; (b) obstacles
+inflated by their reachable set over a short horizon; (c) swept-volume occupancy. Candidate scenarios: pedestrians on
+straight lines and random walks crossing the route; a few moving discs added to the static forest.</p>
+
+<h2 id="s3">Stage 3 · Nominal MPPI and log-MPPI baseline <span class="pill review">planned, paused</span></h2>
+<p>The full plan is in <code>notes/stage3_plan.md</code>. Work continues on an NVIDIA machine, because PyCUDA cannot run on the Mac (Apple M3 Pro, no CUDA).</p>
+<ul>
+  <li><b>Reproduction first:</b> port the CUDA rollout kernel and settings of <a href="https://github.com/IhabMohamed/log-MPPI_ros">log-MPPI_ros</a> to PyCUDA. Re-run the paper's Table II on the repo's Gazebo forests: <code>forest0.world</code> has 250 trees and <code>forest1.world</code> has 500, with 10 trials each for MPPI and log-MPPI. The paper reports 2 vs 0 crashes and 7 vs 1 crashes, with l<sub>av</sub> of 158.7 / 157.9 m and 76.1 / 72.6 m. One mp4 per forest × method.</li>
+  <li><b>Our forest:</b>
+    <ul>
+      <li>Nominal MPPI ignores obstacles.</li>
+      <li>The baseline is log-MPPI with the repo's 1e7 crash penalty, applied on the <b>same 5 m ego window</b> the safety filter sees.</li>
+      <li>50 Hz control, 6 s horizon, v ∈ [0, 1], ω ∈ [−1, 1].</li>
+      <li>50 saved start/goal tasks, with mp4s.</li>
+    </ul></li>
+</ul>
+
+<h2 id="s4">Stages 4–6 · Closed loop, experiments, animation <span class="pill todo">planned</span></h2>
+<ul>
+  <li><b>Stage 4, filter:</b> re-sense and re-encode <i>z</i> at a sensing rate; each control tick, evaluate V and ∇V at the ego state
+      (in the frame of the last window); apply the least-restrictive switch or a QP / CBF-style filter. Open choices: ε margin,
+      sensing rate vs. control rate, what to do when V(ego) &lt; 0.</li>
+  <li><b>Stage 5, experiments:</b> multiple seeds and start/goal pairs; collision rate, success, time to goal, intervention rate;
+      baselines: nominal only, and the filter with the exact-SDF DP value if feasible.</li>
+  <li><b>Stage 6, animation:</b> world view and ego-window inset with the live V = 0 set; ffmpeg is available.</li>
+</ul>
+
+<h2 id="files">File index</h2>
+<div class="tablewrap"><table>
+<tr><th>Path (relative to SimValidation/)</th><th>Purpose</th></tr>
+<tr><td><code>simenv/shapes.py</code></td><td>Circle and polygon (convex or non-convex) with exact SDF; random shape factories</td></tr>
+<tr><td><code>simenv/world.py</code></td><td><code>World</code> (SDF queries, rasterization, save/load JSON), <code>generate_forest</code>, connectivity check</td></tr>
+<tr><td><code>simenv/sensing.py</code></td><td>Ego/world transforms, local occupancy window, SDF with closed border, exact window SDF; imports <code>AdaptiveSF/adaptivesf_models</code></td></tr>
+<tr><td><code>scripts/s1_generate_forest.py</code></td><td>Generate and plot a forest world</td></tr>
+<tr><td><code>scripts/s1_check_value_function.py</code></td><td>Random-pose SF check, figures 2–4, <code>vf_metrics.json</code></td></tr>
+<tr><td><code>scripts/s1_inspect_pose.py</code></td><td>Detailed view of one pose (figure 5)</td></tr>
+<tr><td><code>worlds/forest_seed0.json</code></td><td>Saved world (shapes, start, goal, meta)</td></tr>
+<tr><td><code>notes/stage3_plan.md</code></td><td>Stage 3 plan: repo analysis, parameters, PyCUDA port, experiments, mp4s, GPU-machine setup</td></tr>
+<tr><td><code>results/stage1/</code></td><td>Figures, <code>forest_seed0_stats.json</code>, <code>vf_metrics.json</code> (per-pose numbers and poses)</td></tr>
+</table></div>
+
+<h2 id="log">Session log</h2>
+<div class="log">
+  <div class="e"><div class="when">2026-11-19 · session 2 · stage 3 (planning)</div>
+    Analysed log-MPPI_ros: kernel, cost, noise, parameters and the Table II targets. Decisions: the baseline is log-MPPI only, it uses the
+    5 m ego window, and control runs at 50 Hz. The user then asked for PyCUDA on a GPU and for mp4s, so work is paused to continue on an NVIDIA machine.
+    The project is now in git: <a href="https://github.com/GuanQinG-GitHub/ECE792-2026Fall-AdaptiveSafeMPPI">ECE792-2026Fall-AdaptiveSafeMPPI</a>.
+    Stage 1 questions are deferred to notes.</div>
+  <div class="e"><div class="when">2026-11-18 · session 1 · stage 1</div>
+    Reproduced the README example metrics (CPU and MPS). Built <code>simenv</code> (analytic shapes, forest generator,
+    ego-window sensing). Generated forest seed 0 and ran the value-function check at 100 poses. Fixed the over-estimation
+    metric so it respects the −0.25 label clipping. Waiting for review of world density, gaps, boundary, perception and shapes.</div>
+</div>
+</main>
+</div>
+<script>
+function toggleTheme() {
+  const r = document.documentElement;
+  const dark = r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme = dark ? "light" : "dark";
+  try { localStorage.setItem("hub-theme", r.dataset.theme); } catch (e) {}
+}
+try { const t = localStorage.getItem("hub-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</body>
+</html>

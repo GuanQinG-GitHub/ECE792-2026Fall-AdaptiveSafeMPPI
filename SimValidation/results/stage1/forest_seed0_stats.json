@@ -1,0 +1,45 @@
+{
+ "meta": {
+  "generator": "forest",
+  "seed": 0,
+  "params": {
+   "size": 50.0,
+   "n_obstacles": 900,
+   "min_gap": 0.15,
+   "clear_radius": 2.0,
+   "start": [
+    3.0,
+    3.0
+   ],
+   "goal": [
+    47.0,
+    47.0
+   ],
+   "mix": {
+    "trunk": 0.5,
+    "big_trunk": 0.12,
+    "rock": 0.14,
+    "bush": 0.1,
+    "log": 0.08,
+    "box": 0.06
+   }
+  },
+  "counts": {
+   "trunk": 590,
+   "big_trunk": 79,
+   "rock": 109,
+   "bush": 57,
+   "log": 20,
+   "box": 45
+  },
+  "n_obstacles": 900,
+  "occupied_fraction": 0.13407,
+  "connected_start_goal": true
+ },
+ "clearance_of_free_cells_m": {
+  "p10": 0.1118033988749895,
+  "p50": 0.42720018726587655,
+  "p90": 0.894427190999916
+ },
+ "frac_free_with_clearance_gt_r": 0.628275
+}

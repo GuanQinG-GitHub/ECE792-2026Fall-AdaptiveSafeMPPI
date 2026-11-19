@@ -1,0 +1,122 @@
+{
+ "env_01": {
+  "kind": "indoor",
+  "seconds": 1.4030272960662842,
+  "value_at_ego": 0.537412166595459,
+  "gradient_at_ego": [
+   0.22994057834148407,
+   1.050711989402771,
+   0.027221785858273506
+  ],
+  "vs_dp": {
+   "value_error_cm": 4.796617031097412,
+   "boundary_error_cm": 3.1607396602630615,
+   "false_safe_pct": 0.03138888888888889,
+   "false_unsafe_pct": 2.653611111111111,
+   "safe_pct_reference": 37.846944444444446
+  },
+  "vs_dp_decoded": {
+   "value_error_cm": 1.4431520700454712,
+   "boundary_error_cm": 1.2414218187332153,
+   "false_safe_pct": 0.25805555555555554,
+   "false_unsafe_pct": 0.9094444444444445,
+   "safe_pct_reference": 35.87611111111111
+  }
+ },
+ "env_02": {
+  "kind": "indoor",
+  "seconds": 1.408503770828247,
+  "value_at_ego": 0.32291722297668457,
+  "gradient_at_ego": [
+   -0.5042183995246887,
+   0.48571810126304626,
+   0.11366062611341476
+  ],
+  "vs_dp": {
+   "value_error_cm": 2.840644598007202,
+   "boundary_error_cm": 1.8086284399032593,
+   "false_safe_pct": 0.051388888888888894,
+   "false_unsafe_pct": 1.0880555555555556,
+   "safe_pct_reference": 22.551944444444445
+  },
+  "vs_dp_decoded": {
+   "value_error_cm": 1.155608892440796,
+   "boundary_error_cm": 1.0008021593093872,
+   "false_safe_pct": 0.4966666666666667,
+   "false_unsafe_pct": 0.3025,
+   "safe_pct_reference": 21.32111111111111
+  }
+ },
+ "env_03": {
+  "kind": "indoor",
+  "seconds": 1.394395112991333,
+  "value_at_ego": 0.21119949221611023,
+  "gradient_at_ego": [
+   0.26353713870048523,
+   0.719841480255127,
+   0.037030450999736786
+  ],
+  "vs_dp": {
+   "value_error_cm": 4.837601661682129,
+   "boundary_error_cm": 3.0653324127197266,
+   "false_safe_pct": 0.05,
+   "false_unsafe_pct": 2.503611111111111,
+   "safe_pct_reference": 33.61472222222222
+  },
+  "vs_dp_decoded": {
+   "value_error_cm": 1.1834516525268555,
+   "boundary_error_cm": 1.0880663394927979,
+   "false_safe_pct": 0.5125000000000001,
+   "false_unsafe_pct": 0.5311111111111111,
+   "safe_pct_reference": 31.17972222222222
+  }
+ },
+ "env_04": {
+  "kind": "outdoor",
+  "seconds": 1.3764121532440186,
+  "value_at_ego": 1.5863701105117798,
+  "gradient_at_ego": [
+   -0.08615274727344513,
+   -0.08666025102138519,
+   0.0006639156490564346
+  ],
+  "vs_dp": {
+   "value_error_cm": 7.820370197296143,
+   "boundary_error_cm": 1.8142927885055542,
+   "false_safe_pct": 0.0,
+   "false_unsafe_pct": 1.2897222222222222,
+   "safe_pct_reference": 76.93555555555555
+  },
+  "vs_dp_decoded": {
+   "value_error_cm": 0.2952466309070587,
+   "boundary_error_cm": 0.25655505061149597,
+   "false_safe_pct": 0.11916666666666666,
+   "false_unsafe_pct": 0.39472222222222225,
+   "safe_pct_reference": 75.92138888888888
+  }
+ },
+ "env_05": {
+  "kind": "outdoor",
+  "seconds": 1.3718433380126953,
+  "value_at_ego": 0.0774034634232521,
+  "gradient_at_ego": [
+   -0.33718341588974,
+   0.8395953178405762,
+   0.14480894804000854
+  ],
+  "vs_dp": {
+   "value_error_cm": 3.5030603408813477,
+   "boundary_error_cm": 2.468703508377075,
+   "false_safe_pct": 0.1713888888888889,
+   "false_unsafe_pct": 3.7511111111111113,
+   "safe_pct_reference": 40.54416666666666
+  },
+  "vs_dp_decoded": {
+   "value_error_cm": 1.448647141456604,
+   "boundary_error_cm": 1.415575623512268,
+   "false_safe_pct": 0.908611111111111,
+   "false_unsafe_pct": 1.533888888888889,
+   "safe_pct_reference": 37.58972222222222
+  }
+ }
+}
